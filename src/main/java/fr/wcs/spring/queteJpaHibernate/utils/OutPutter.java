@@ -4,14 +4,16 @@
  */
 package fr.wcs.spring.queteJpaHibernate.utils;
 
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import fr.wcs.spring.queteJpaHibernate.entities.User;
-import fr.wcs.spring.queteJpaHibernate.repositories.UserRepoDao;
+import fr.wcs.spring.queteJpaHibernate.entities.Exploitant;
+import fr.wcs.spring.queteJpaHibernate.repositories.ExploitantRepoDao;
 
 /**
  * @author franck Desmedt github/bigmoletos
@@ -19,51 +21,67 @@ import fr.wcs.spring.queteJpaHibernate.repositories.UserRepoDao;
  */
 @Component
 public class OutPutter implements CommandLineRunner {
-
+//	Notice the typical CRUD
+//	 *         functionality:
+//	 * 
+//	 *         save(…) – save an Iterable of entities. Here, we can pass multiple
+//	 *         objects to save them in a batch 
+//	 *         findOne(…) – get a single entity
+//	 *         based on passed primary key value 
+//	 *         findAll() – get an Iterable of all
+//	 *         available entities in database 
+//	 *         count() – return the count of total entities in a table 
+//	 *         delete(…) – delete an entity based on the passed
+//	 *         object exists(…) – verify if an entity exists based on the passed
+//	 *         primary key value
 	private Logger LOG = LoggerFactory.getLogger("Wilder");
 
 	@Autowired
-	UserRepoDao userDao;
+	ExploitantRepoDao exploitantDao;
 
 	@Override
 	public void run(String... args) throws Exception {
 
 		// Checke combien d'objets se trouvent dans la BDD
 		LOG.info("******************");
-		LOG.info("Objects in DB : " + userDao.count());
+		LOG.info("Objects in DB : " + exploitantDao.count());
 
 		// Crée un nouvel utilisateur et l'enregistre dans la BDD
-		User user1 = new User("Brenda", "Wildeuse", 19);
+		Exploitant exploitant1 = new Exploitant("Francois", "Pignon", LocalDateTime.now(), "b.wildeuse@tit.com", 42);
 		LOG.info("******************");
-		LOG.info(user1 + " has been created !");
-		userDao.save(user1);
-		LOG.info(user1 + " has been saved !");
+		LOG.info(exploitant1 + " has been created !");
+		exploitantDao.save(exploitant1);
+		LOG.info(exploitant1 + " has been saved !");
 
 		// Crée un second utilisateur et l'enregistre dans la BDD
-		User user2 = new User("Brandon", "Wilder", 33);
+		Exploitant exploitant2 = new Exploitant("Juste", "Blanc", LocalDateTime.now(), "jblanc@juste.blanc", 46);
 		LOG.info("******************");
-		LOG.info(user2 + " has been created !");
-		userDao.save(user2);
-		LOG.info(user2 + " has been saved !");
+		LOG.info(exploitant2 + " has been created !");
+		exploitantDao.save(exploitant2);
+		LOG.info(exploitant2 + " has been saved !");
 
 		// Lit les informations correspondant au second utilisateur
-		User tempUser = userDao.findById(2L).get(); /*
-													 * On écrit "2L" car le type de l'id est Long
-													 */
+		Exploitant tempexploitant = exploitantDao.findById(2L).get();
+		/*
+		 * On écrit "2L" car le type de l'id est Long
+		 */
 		LOG.info("******************");
-		LOG.info("Second user's firstName is " + tempUser.getFirstName());
-		LOG.info("Second user's lastName is " + tempUser.getLastName());
-		LOG.info("Second user's age is " + tempUser.getAge());
+		LOG.info("Second exploitant's firstName is " + tempexploitant.getFirstName());
+		LOG.info("Second exploitant's lastName is " + tempexploitant.getLastName());
+		LOG.info("Second exploitant's age is " + tempexploitant.getDateInscription());
+		LOG.info("Second exploitant's age is " + tempexploitant.getEmail());
+		LOG.info("Second exploitant's age is " + tempexploitant.getAge());
 
 		// Liste les utilisateurs enregistrés dans la BDD
 		LOG.info("******************");
-		LOG.info("Users in list are ");
-		for (User myUser : userDao.findAll()) {
-			LOG.info(myUser.toString());
+		LOG.info("exploitants in list are ");
+		for (Exploitant myexploitant : exploitantDao.findAll()) {
+			LOG.info(myexploitant.toString());
 		}
 
 		// Supprime le second utilisateur de la BDD
-		// userDao.deleteById(2L);
+		// exploitantDao.deleteById(2L);
+		// exploitantDao.deleteById(4L);
 		/*
 		 * risque de provoquer une erreur si tu n'as pas vidé ta table avant de relancer
 		 * ton application !
@@ -74,9 +92,9 @@ public class OutPutter implements CommandLineRunner {
 		 * second utilisateur a bien été supprimé de la BDD)
 		 */
 		LOG.info("******************");
-		LOG.info("Users in list are ");
-		for (User myUser : userDao.findAll()) {
-			LOG.info(myUser.toString());
+		LOG.info("exploitants in list are ");
+		for (Exploitant myexploitant : exploitantDao.findAll()) {
+			LOG.info(myexploitant.toString());
 		}
 
 	}

@@ -45,6 +45,11 @@ public class OutPutter implements CommandLineRunner {
 		// Checke combien d'objets se trouvent dans la BDD
 		LOG.info("******************");
 		LOG.info("Objects in DB : " + exploitantDao.count());
+		// vide la table avant de commencer
+		for (Exploitant myexploitant : exploitantDao.findAll()) {
+			exploitantDao.delete(myexploitant);
+			LOG.info(myexploitant.toString());
+		}
 
 		// Crée un nouvel utilisateur et l'enregistre dans la BDD
 		Exploitant exploitant1 = new Exploitant("Francois", "Pignon", LocalDateTime.now(), "b.wildeuse@tit.com", 42);
@@ -80,7 +85,7 @@ public class OutPutter implements CommandLineRunner {
 		}
 
 		// Supprime le second utilisateur de la BDD
-		// exploitantDao.deleteById(2L);
+		exploitantDao.deleteById(2L);
 		// exploitantDao.deleteById(4L);
 		/*
 		 * risque de provoquer une erreur si tu n'as pas vidé ta table avant de relancer
